@@ -71,9 +71,6 @@ INSERT INTO products (name, description, price, popularity, image_url, created_a
 VALUES ('Be wild', 'Unleashed!', 6.00, 60, '/stickers/BeWild.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
 
 INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
-VALUES ('SummerCat', 'Heatwave Whiskers', 6.00, 60, '/stickers/AestheticSummerCat.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
-
-INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
 VALUES ('Savageness', 'Your opinion means nothing', 6.00, 60, '/stickers/YourOpinonMeansNothing.png', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
 
 INSERT INTO products (name, description, price, popularity, image_url, created_at, created_by, updated_at, updated_by)
