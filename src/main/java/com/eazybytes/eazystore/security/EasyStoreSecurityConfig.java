@@ -1,10 +1,8 @@
 package com.eazybytes.eazystore.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -68,7 +66,8 @@ public class EasyStoreSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         var user1 = User.builder().username("nimda")
-                .password(passwordEncoder.encode("password")).roles("USER","ADMIN").build();
+                .password(passwordEncoder.encode("password"))
+                .roles("USER","ADMIN").build();
         return new InMemoryUserDetailsManager(user1);
     }
 

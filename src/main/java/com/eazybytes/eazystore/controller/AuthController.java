@@ -2,8 +2,9 @@ package com.eazybytes.eazystore.controller;
 
 import com.eazybytes.eazystore.dto.LoginRequestDto;
 import com.eazybytes.eazystore.dto.LoginResponseDto;
+import com.eazybytes.eazystore.dto.UserDto;
+import com.eazybytes.eazystore.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> apiLogin(@RequestBody LoginRequestDto loginRequestDto) {
@@ -30,8 +33,12 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(
                             loginRequestDto.username(), loginRequestDto.password()
                     ));
+            var user = new UserDto();
+            var loggedInUser = (User) authentication.getPrincipal();
+            user.setName(loggedInUser.getUsername());
+            String token = jwtUtil.generateJwtToken(authentication);
             return ResponseEntity.ok()
-                    .body(new LoginResponseDto(HttpStatus.OK.getReasonPhrase(), null, null));
+                    .body(new LoginResponseDto(HttpStatus.OK.getReasonPhrase(), user, token));
         } catch (BadCredentialsException ex) {
             return buildErrorResponse(HttpStatus.UNAUTHORIZED,
                     "Invalid username or password");
@@ -45,8 +52,7 @@ public class AuthController {
     }
 
     private ResponseEntity<LoginResponseDto> buildErrorResponse(HttpStatus status, String message) {
-        return ResponseEntity
-                .status(status)
+        return ResponseEntity.status(status)
                 .body(new LoginResponseDto(message, null, null));
     }
 }
